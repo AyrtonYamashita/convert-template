@@ -1,6 +1,6 @@
-const USD = 5.73
-const EUR = 6.27
-const GBP = 7.30
+// const USD = 5.73
+// const EUR = 6.27
+// const GBP = 7.30
 
 const form = document.querySelector("form")
 const amount = document.querySelector("#amount")
@@ -22,15 +22,33 @@ amount.addEventListener("input", () => {
 form.onsubmit = (e) => {
   e.preventDefault()
 
+
+
   switch (currency.value) {
     case "USD":
-      convertCurrency(amount.value, USD, "US$")
+      fetch(`https://economia.awesomeapi.com.br/json/last/${currency.value}-BRL`).then(response => {
+        return response.json()
+      }).then(body => {
+        const currency_value = body.USDBRL
+
+        convertCurrency(amount.value, currency_value.high, String(currency_value.code).replace("D", "$"))
+      })
       break;
     case "EUR":
-      convertCurrency(amount.value, EUR, "€")
+      fetch(`https://economia.awesomeapi.com.br/json/last/${currency.value}-BRL`).then(response => {
+        return response.json()
+      }).then(body => {
+        const currency_value = body.EURBRL
+        convertCurrency(amount.value, currency_value.high, String(currency_value.code).replace("EUR", "€"))
+      })
       break;
     case "GBP":
-      convertCurrency(amount.value, GBP, "£")
+      fetch(`https://economia.awesomeapi.com.br/json/last/${currency.value}-BRL`).then(response => {
+        return response.json()
+      }).then(body => {
+        const currency_value = body.GBPBRL
+        convertCurrency(amount.value, currency_value.high, String(currency_value.code).replace("GBP", "£"))
+      })
       break;
     default:
       alert("Tipo de moeda inválido!");
@@ -44,7 +62,7 @@ function convertCurrency(amount, price, symbol) {
     let total = amount * price
 
     // Verifica se o resultado não é um numero
-    if(isNaN(total)){
+    if (isNaN(total)) {
       return alert("Digite o valor corretamente para conversão.")
     }
 
@@ -60,7 +78,7 @@ function convertCurrency(amount, price, symbol) {
   }
 }
 
-function formatCurrencyBRL(value){
+function formatCurrencyBRL(value) {
   return Number(value).toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL"
