@@ -6,8 +6,8 @@ const form = document.querySelector("form")
 const amount = document.querySelector("#amount")
 const currency = document.querySelector("#currency")
 const footer = document.querySelector("main footer")
-const values = document.querySelector("#description")
-const conversion = document.querySelector("#result")
+const description = document.querySelector("#description")
+const result = document.querySelector("#result")
 
 
 const regex_hasCharacters = /\D+/g
@@ -40,8 +40,10 @@ form.onsubmit = (e) => {
 // Função para converter a moeda.
 function convertCurrency(amount, price, symbol) {
   try {
-    values.textContent = `${symbol} 1 = ${formatCurrencyBRL(price)}`
-
+    description.textContent = `${symbol} 1 = ${formatCurrencyBRL(price)}`
+    let total = amount * price
+    total = formatCurrencyBRL(total)
+    result.textContent = `${total} Reais`
     footer.classList.add("show-result");
 
   } catch (e) {
